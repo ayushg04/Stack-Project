@@ -1,0 +1,355 @@
+﻿@using DataLayer
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/json2/20130526/json2.min.js"></script>
+    <title>Document</title>
+    <style>
+
+        * {
+            list-style: none;
+            text-decoration: none;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        body {
+            background: #f5f6fa;
+        }
+
+        .wrapper .sidebar {
+            background: rgb(5, 68, 104);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 225px;
+            height: 100%;
+            padding: 20px 0;
+            transition: all 0.5s ease;
+        }
+
+            .wrapper .sidebar .profile {
+                margin-bottom: 30px;
+                text-align: center;
+            }
+
+
+                .wrapper .sidebar .profile h3 {
+                    color: #ffffff;
+                    margin: 10px 0 5px;
+                }
+
+                .wrapper .sidebar .profile p {
+                    color: rgb(206, 240, 253);
+                    font-size: 14px;
+                }
+
+            .wrapper .sidebar ul li a {
+                display: block;
+                padding: 13px 30px;
+                border-bottom: 1px solid #10558d;
+                color: rgb(241, 237, 237);
+                font-size: 16px;
+                position: relative;
+            }
+
+                .wrapper .sidebar ul li a .icon {
+                    color: #dee4ec;
+                    width: 30px;
+                    display: inline-block;
+                }
+
+                .wrapper .sidebar ul li a:hover,
+                .wrapper .sidebar ul li a.active {
+                    color: #0c7db1;
+                    background: white;
+                    border-right: 2px solid rgb(5, 68, 104);
+                }
+
+                    .wrapper .sidebar ul li a:hover .icon,
+                    .wrapper .sidebar ul li a.active .icon {
+                        color: #0c7db1;
+                    }
+
+                    .wrapper .sidebar ul li a:hover:before,
+                    .wrapper .sidebar ul li a.active:before {
+                        display: block;
+                    }
+
+        .wrapper .section {
+            width: calc(100% - 225px);
+            margin-left: 225px;
+            transition: all 0.5s ease;
+        }
+
+            .wrapper .section .top_navbar {
+                background: rgb(7, 105, 185);
+                height: 50px;
+                display: flex;
+                align-items: center;
+                padding: 0 30px;
+            }
+
+                .wrapper .section .top_navbar .hamburger a {
+                    font-size: 28px;
+                    color: #f4fbff;
+                }
+
+                    .wrapper .section .top_navbar .hamburger a:hover {
+                        color: #a2ecff;
+                    }
+
+        body.active .wrapper .sidebar {
+            left: -225px;
+        }
+
+        body.active .wrapper .section {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        .col-md-6 {
+            padding: 20px 20px 20px 20px;
+        }
+
+        .voter {
+            position: absolute;
+            font-size: x-large;
+            margin-top: 20px;
+        }
+
+        .ans-desc {
+            margin: 20px 20px 20px 40px;
+        }
+
+        .upper {
+            background-color: khaki;
+            color: saddlebrown;
+        }
+
+        .middle {
+            color: darkgoldenrod;
+            font-size: unset;
+        }
+
+        .lower {
+            font-size: large;
+        }
+
+        button {
+            border: 0;
+            cursor: pointer;
+            font-size: 15px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <!--Top menu -->
+        <div class="sidebar">
+            <!--profile image & text-->
+            <div class="profile">
+                <h3>Ayush Gaur</h3>
+                <p>Index-Dash</p>
+            </div>
+            <!--menu item-->
+            <ul>
+                <li>
+                    <a href="@Url.Action("Index","Roles")">
+                        <span class="icon"><i class="fas fa-desktop"></i></span>
+                        <span class="item">My Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Login","Account")">
+                        <span class="icon"><i class="fas fa-cogs"></i></span>
+                        <span class="item">Sign In</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Register","Account")">
+                        <span class="icon"><i class="fas fa-cogs"></i></span>
+                        <span class="item">Sign Up</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index","Users")">
+                        <span class="icon"><i class="fas fa-user-friends"></i></span>
+                        <span class="item">Users</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("PremiumUser","Roles")">
+                        <span class="icon"><i class="fas fa-user-shield"></i></span>
+                        <span class="item">Premium Users</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Logout","Account")">
+                        <span class="icon"><i class="fas fa-cog"></i></span>
+                        <span class="item">Logout</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Admin","Admin")">
+                        <span class="icon"><i class="fas fa-user-shield"></i></span>
+                        <span class="item">Admin</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index","Questions")">
+                        <span class="icon"><i class="fas fa-user-shield"></i></span>
+                        <span class="item">Questions</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="section">
+            <div class="top_navbar">
+                <div class="hamburger">
+                    <a href="#">
+                        <i class="fas fa-bars"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="upper col-md-6">
+                        <h2>How to create roles in ASP.NET Core and assign them to users?</h2>
+                    </div>
+
+                    <hr />
+
+                    <div class="middle col-md-6">
+                        <h5>I am using the ASP.NET Core default website template and have the authentication selected as "Individual User Accounts". How can I create roles and assign it to users so that I can use the roles in a controller to filter access?</h5>
+                    </div>
+
+                    <hr />
+                    <div class="lower col-md-6">
+
+                        <div class="voter">
+                            <button class="posi" id="posi" method="post" type="button" onclick="plus()" style="font-size: 20px;">+</button>
+
+                            @{
+
+                                <p id="voter" class="votes">
+                                    @* @voter.count*@
+                                    0
+                                </p>
+
+                            }
+
+                            <button class="negi" id="negi" method="post" type="button" onclick="minus()" style="font-size: 20px;">-</button>
+                        </div>
+                        <div class="ans-desc">
+                            <p>
+                                <br />
+                                I have created an action in the Accounts controller that calls a function to create the roles and assign the Admin role to the default user. (You should probably remove the default user in production):
+                                <br />
+                                private async Task CreateRolesandUsers()<br />
+                                {<br />
+                                bool x = await _roleManager.RoleExistsAsync("Admin");<br />
+                                if (!x)<br />
+                                {<br />
+                                // first we create Admin rool<br />
+                                var role = new IdentityRole();<br />
+                                role.Name = "Admin";<br />
+                                await _roleManager.CreateAsync(role);<br />
+                                <br />
+                                //Here we create a Admin super user who will maintain the website<br />
+
+                                var user = new ApplicationUser();<br />
+                                user.UserName = "default";<br />
+                                user.Email = "default@default.com";<br />
+
+                                string userPWD = "somepassword";<br />
+
+                                IdentityResult chkUser = await _userManager.CreateAsync(user, userPWD);<br />
+
+                                //Add default User to Role Admin<br />
+                                if (chkUser.Succeeded)<br />
+                                {<br />
+                                var result1 = await _userManager.AddToRoleAsync(user, "Admin");<br />
+                                }<br />
+                                }<br />
+
+                                // creating Creating Manager role<br />
+                                x = await _roleManager.RoleExistsAsync("Manager");<br />
+                                if (!x)<br />
+                                {<br />
+                                var role = new IdentityRole();<br />
+                                role.Name = "Manager";<br />
+                                await _roleManager.CreateAsync(role);<br />
+                                }<br />
+
+                                // creating Creating Employee role<br />
+                                x = await _roleManager.RoleExistsAsync("Employee");<br />
+                                if (!x)<br />
+                                {<br />
+                                var role = new IdentityRole();<br />
+                                role.Name = "Employee";<br />
+                                await _roleManager.CreateAsync(role);<br />
+                                }<br />
+                                }<br />
+                                After you could create a controller to manage roles for the users.<br />
+                            </p>
+
+                            <hr />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+        var hamburger = document.querySelector(".hamburger");
+        hamburger.addEventListener("click", function () {
+            document.querySelector("body").classList.toggle("active");
+        })
+        var voter = 0;
+
+        function plus() {
+            voter += 1;
+            document.getElementById("voter").innerHTML = voter;
+
+            submitBtn()
+        }
+
+        function minus() {
+            voter -= 1;
+            document.getElementById("voter").innerHTML = voter;
+            submitBtn()
+        }
+        function submitBtn() {
+            var data = $("#posi").val();
+            console.log(data);
+
+            $.ajax({
+                type: 'POST',
+                url: '/Roles/Index',
+                data: data,
+                success: function (data) {
+
+                    console.log(data);
+                },
+                error: function (error) {
+
+                    console.log(error);
+                }
+            })
+        }
+    </script>
+</body>
+</html>

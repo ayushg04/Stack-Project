@@ -1,0 +1,236 @@
+﻿@model IEnumerable<DataLayer.Account>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        * {
+            list-style: none;
+            text-decoration: none;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        body {
+            background: #f5f6fa;
+        }
+
+        .wrapper .sidebar {
+            background: rgb(5, 68, 104);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 225px;
+            height: 100%;
+            padding: 20px 0;
+            transition: all 0.5s ease;
+        }
+        .wrapper .sidebar .profile {
+                margin-bottom: 30px;
+                text-align: center;
+        }
+
+
+        .wrapper .sidebar .profile h3 {
+                    color: #ffffff;
+                    margin: 10px 0 5px;
+        }
+
+        .wrapper .sidebar .profile p {
+                    color: rgb(206, 240, 253);
+                    font-size: 14px;
+        }
+            .wrapper .sidebar ul li a {
+                display: block;
+                padding: 13px 30px;
+                border-bottom: 1px solid #10558d;
+                color: rgb(241, 237, 237);
+                font-size: 16px;
+                position: relative;
+            }
+
+                .wrapper .sidebar ul li a .icon {
+                    color: #dee4ec;
+                    width: 30px;
+                    display: inline-block;
+                }
+                .wrapper .sidebar ul li a:hover,
+                .wrapper .sidebar ul li a.active {
+                    color: #0c7db1;
+                    background: white;
+                    border-right: 2px solid rgb(5, 68, 104);
+                }
+
+                    .wrapper .sidebar ul li a:hover .icon,
+                    .wrapper .sidebar ul li a.active .icon {
+                        color: #0c7db1;
+                    }
+
+                    .wrapper .sidebar ul li a:hover:before,
+                    .wrapper .sidebar ul li a.active:before {
+                        display: block;
+                    }
+        .wrapper .section {
+            width: calc(100% - 225px);
+            margin-left: 225px;
+            transition: all 0.5s ease;
+        }
+
+            .wrapper .section .top_navbar {
+                background: rgb(7, 105, 185);
+                height: 50px;
+                display: flex;
+                align-items: center;
+                padding: 0 30px;
+            }
+
+                .wrapper .section .top_navbar .hamburger a {
+                    font-size: 28px;
+                    color: #f4fbff;
+                }
+
+                    .wrapper .section .top_navbar .hamburger a:hover {
+                        color: #a2ecff;
+                    }
+        body.active .wrapper .sidebar {
+            left: -225px;
+        }
+
+        body.active .wrapper .section {
+            margin-left: 0;
+            width: 100%;
+        }
+        .col-md-6 {
+            padding: 20px 20px 20px 20px;
+        }
+    </style>
+</head>
+<body>
+    
+
+    <div class="wrapper">
+        <!--Top menu -->
+        <div class="sidebar">
+            <!--profile image & text-->
+            <div class="profile">
+                <h3>Ayush Gaur</h3>
+                <p>Admin</p>
+            </div>
+            <!--menu item-->
+            <ul>
+                <li>
+                    <a href="@Url.Action("Index","Roles")">
+                        <span class="icon"><i class="fas fa-desktop"></i></span>
+                        <span class="item">My Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("UserProfile","Admin")">
+                        <span class="icon"><i class="fas fa-user-friends"></i></span>
+                        <span class="item">Users Profile</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("PremiumProfile","Admin")">
+                        <span class="icon"><i class="fas fa-user-shield"></i></span>
+                        <span class="item">Premium Profile</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Logout","Account")">
+                        <span class="icon"><i class="fas fa-cog"></i></span>
+                        <span class="item">Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="section">
+            <div class="top_navbar">
+                <div class="hamburger">
+                    <a href="#">
+                        <i class="fas fa-bars"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="header col-md-6">
+                        <h2>How to create roles in ASP.NET Core and assign them to users?</h2>
+                    </div>
+                    <div class="middle col-md-6">
+                        <h5>I am using the ASP.NET Core default website template and have the authentication selected as "Individual User Accounts". How can I create roles and assign it to users so that I can use the roles in a controller to filter access?</h5>
+                    </div>
+                    <div class="lower col-md-6">
+                        <h5>
+
+                            I have created an action in the Accounts controller that calls a function to create the roles and assign the Admin role to the default user. (You should probably remove the default user in production):
+
+                            private async Task CreateRolesandUsers()
+                            {
+                            bool x = await _roleManager.RoleExistsAsync("Admin");
+                            if (!x)
+                            {
+                            // first we create Admin rool
+                            var role = new IdentityRole();
+                            role.Name = "Admin";
+                            await _roleManager.CreateAsync(role);
+
+                            //Here we create a Admin super user who will maintain the website
+
+                            var user = new ApplicationUser();
+                            user.UserName = "default";
+                            user.Email = "default@default.com";
+
+                            string userPWD = "somepassword";
+
+                            IdentityResult chkUser = await _userManager.CreateAsync(user, userPWD);
+
+                            //Add default User to Role Admin
+                            if (chkUser.Succeeded)
+                            {
+                            var result1 = await _userManager.AddToRoleAsync(user, "Admin");
+                            }
+                            }
+
+                            // creating Creating Manager role
+                            x = await _roleManager.RoleExistsAsync("Manager");
+                            if (!x)
+                            {
+                            var role = new IdentityRole();
+                            role.Name = "Manager";
+                            await _roleManager.CreateAsync(role);
+                            }
+
+                            // creating Creating Employee role
+                            x = await _roleManager.RoleExistsAsync("Employee");
+                            if (!x)
+                            {
+                            var role = new IdentityRole();
+                            role.Name = "Employee";
+                            await _roleManager.CreateAsync(role);
+                            }
+                            }
+                            After you could create a controller to manage roles for the users.
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+    <script>
+        var hamburger = document.querySelector(".hamburger");
+        hamburger.addEventListener("click", function () {
+            document.querySelector("body").classList.toggle("active");
+        })
+    </script>
+</body>
+</html>
